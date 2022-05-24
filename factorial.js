@@ -19,4 +19,18 @@ function calcFactorialFor(num) {
     return factorial;
 }
 
-console.log(calcFactorialFor(5));
+
+
+
+function recursiveFactorial(factorial) {
+    let result = 1;
+    let factorialNumber = factorial;
+
+    if (factorial == 0) {
+        return result;
+    } else {
+        return factorialNumber * recursiveFactorial(--factorial);
+    }
+}
+
+console.log(recursiveFactorial(5));
