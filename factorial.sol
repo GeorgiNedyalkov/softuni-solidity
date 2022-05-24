@@ -1,7 +1,7 @@
 pragma solidity ^0.6.0;
 
 contract Factorial {
-    function calcFactorialIterative(uint256 n) public returns (uint256) {
+    function calcFactorialIterative(uint256 n) public pure returns (uint256) {
         uint256 result = 1;
 
         for (uint256 i = n; i > 0; i--) {
@@ -11,7 +11,7 @@ contract Factorial {
         return result;
     }
 
-    function calcFactorialRecursive(uint256 n) public returns (uint256) {
+    function calcFactorialRecursive(uint256 n) public pure returns (uint256) {
         uint256 result = 1;
         uint256 counter = n;
 
