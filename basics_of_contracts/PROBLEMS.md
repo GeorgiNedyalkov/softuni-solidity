@@ -23,23 +23,23 @@ Write a contract, that:
 
  Create an auction contract, that:
 
-- [] Has an owner
-- [] Has a method to place bid
- - [] The auction should not be cancelled or expired
- - [] Should accept ETH
- - [] Everyone except the owner can place new bid.
- - [] The bid should be greater than the highest bid otherwise the function should throw an exception
-- [] Has a method to check the highest bid and the highest bidder
- - [] use the correct function modifier
-- [] Has a method to cancel the auction
- - [] Only the owner can cancel the auction
-- [] Has a method to withdraw funds
- - [] Should send ETH
- - [] If the auction is cancelled everyone can withdraw their bid
- - [] If the auction is not cancelled but it's expired, then the owner of the auction can withdraw the
+- [x] Has an owner
+- [x] Has a method to place bid
+ - [x] The auction should not be cancelled or expired
+ - [x] Should accept ETH
+ - [x] Everyone except the owner can place new bid.
+ - [x] The bid should be greater than the highest bid otherwise the function should throw an exception
+- [x] Has a method to check the highest bid and the highest bidder
+ - [x] use the correct function modifier
+- [x] Has a method to cancel the auction
+ - [x] Only the owner can cancel the auction
+- [x] Has a method to withdraw funds
+ - [x] Should send ETH
+ - [x] If the auction is cancelled everyone can withdraw their bid
+ - [x] If the auction is not cancelled but it's expired, then the owner of the auction can withdraw the
  highest bidder bid. Everyone else can withdraw their bid.
- - [] Every method should emit an event
- - [] Use assert and require whenever possible 
- - [] The constructor shall receive 2 parameters - start time and end time
-  - [] You need to validate them correctly. Think about it.
-- [] Create custom modifier which will help you with all functions
+ - [x] Every method should emit an event
+ - [x] Use assert and require whenever possible 
+ - [x] The constructor shall receive 2 parameters - start time and end time
+  - [x] You need to validate them correctly. Think about it.
+- [x] Create custom modifier which will help you with all functions
