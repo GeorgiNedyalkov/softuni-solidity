@@ -2,55 +2,131 @@ pragma solidity >=0.4.22 <0.6.0;
 
 contract Auction {
     address public owner;
-    uint256 startAuction;
-    uint256 endAuction;
+    uint256 startBlock;
+    uint256 endBlock;
 
-    address public highestBidder;
-    uint256 public highestBid;
     bool public canceled;
-    mapping(address => uint256) placedBids;
+    address public highestBidder;
+    mapping(address => uint256) fundsOfBidder;
 
-    event NewHighestBid(uint256 previousHighestBid, uint256 NewHighestBid);
-    event ReturnedHighestBid(uint256 highestBid, address highestBidder);
-    event AuctionEnded(address winner, uint256 winningBid);
+    event LogBid(
+        address bidder,
+        uint256 bid,
+        address highestBidder,
+        uint256 highestBid
+    );
+    event LogWithdrawal(
+        address withdrawer,
+        address withdrawalAccount,
+        uint256 amount
+    );
+    event LogCanceled();
 
-    constructor(uint256 auctionDuration) public {
+    constructor(uint256 _startBlock, uint256 _endBlock) public {
+        require(_startBlock <= _endBlock);
+        require(_startBlock > block.number);
+
         owner = msg.sender;
-        auctionLive = true;
-        startAuction = block.timestamp;
-        endAuction = block.timestamp + auctionDuration;
+        startBlock = _startBlock;
+        endBlock = _endBlock;
     }
 
-    modifier notOwner() {
-        require(owner != msg.sender, "Action owner cannot place bid.");
+    modifier auctionIsLive() {
+        require(canceled == false);
+        require(block.number >= startBlock && block.number <= endBlock);
         _;
     }
 
-    modifier liveAuction() {
-        assert(auctionLive == true);
-        assert(startAuction < block.timestamp && endAuction > block.timestamp);
+    modifier onlyOwner() {
+        require(owner == msg.sender);
         _;
     }
 
-    function placeBid(uint256 bid) public payable notOwner liveAuction {
-        require(bid > highestBid);
-        placedBid[msg.sender] = bid;
-        highestBid = bid;
+    modifier onlyNotOwner() {
+        require(owner != msg.sender);
+        _;
+    }
+
+    modifier onlyAfterStart() {
+        require(block.number >= startBlock);
+        _;
+    }
+
+    modifier onlyBeforeEnd() {
+        require(block.number <= endBlock);
+        _;
+    }
+
+    modifier onlyNotCanceled() {
+        require(canceled == false);
+        _;
+    }
+
+    modifier onlyEndedOrCanceled() {
+        require(canceled == false);
+        _;
+    }
+
+    function placeBid()
+        public
+        payable
+        auctionIsLive
+        onlyAfterStart
+        onlyBeforeEnd
+        onlyNotCanceled
+        onlyNotOwner
+    {
+        // reject payments of 0 ETH
+        require(msg.value > 0);
+
+        uint256 newBid = fundsOfBidder[msg.sender] + msg.value; // add to your bid, rather than making a new bid
+
+        // get the current highest bid
+        uint256 highestBid = fundsOfBidder[highestBidder];
+
+        require(newBid > highestBid);
+
+        // update the user bid
+        fundsOfBidder[msg.sender] = newBid;
+
         highestBidder = msg.sender;
-        emit NewHighestBid(bid, highestBid);
+
+        emit LogBid(msg.sender, newBid, highestBidder, highestBid);
     }
 
-    function getHighestBid() public view returns (uint256, address) {
-        return (highestBid, highestBidder);
-        emit ReturnedHighestBid(highestBid, highestBidder);
+    // it is always a good principle to let users withdraw funds themselves rather than sending it to them
+    function withdraw() public onlyEndedOrCanceled {
+        address withdrawAccount;
+        uint256 withdrawAmount;
+
+        if (canceled) {
+            withdrawAmount = fundsOfBidder[msg.sender];
+        } else {
+            // highest bidder won so he cannot withdraw his funds
+            require(msg.sender != highestBidder);
+
+            // the auction's owner should be allowed to withdraw the highest bid
+            if (msg.sender == owner) {
+                withdrawAmount = fundsOfBidder[highestBidder];
+            } else {
+                // all the participants should be able to withdraw of they did not win
+                withdrawAmount = fundsOfBidder[msg.sender];
+            }
+        }
+
+        require(withdrawAmount > 0);
+
+        // first decrearse the balance if the withdrawer (protection against Reentrancy)
+        fundsOfBidder[withdrawAccount] -= withdrawAmount;
+
+        // then send the funds
+        msg.sender.transfer(withdrawAmount);
+
+        emit LogWithdrawal(msg.sender, withdrawAccount, withdrawAmount);
     }
 
-    function cancelAuction() public onlyOwner {
-        auctionLive = false;
-    }
-
-    function withdrawFunds() public payable {
-        require(auctionLive == false);
-        msg.sender.transfer(placedBids[msg.sender]);
+    function cancelAuction() public onlyOwner onlyBeforeEnd onlyNotCanceled {
+        canceled = true;
+        emit LogCanceled();
     }
 }
