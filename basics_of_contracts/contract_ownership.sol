@@ -1,10 +1,12 @@
-pragma solidity >=0.4.22 <0.5.5;
+pragma solidity >=0.4.22 <0.6.0;
 
 contract ContractOwnership {
-    event OwnershipChanged(address indexed oldOwner, address indexed newOwner);
     event FallbackEvent(address sender, uint256 value);
+    event OwnershipChanged(address indexed oldOwner, address indexed newOwner);
 
     address public owner;
+    address public prospectOwner;
+    uint256 public ownershipChangedTimeStamp;
 
     constructor() public {
         owner = msg.sender;
@@ -15,18 +17,23 @@ contract ContractOwnership {
         _;
     }
 
-    modifier onlyProposedOwner() {}
-
-    function changeOwner(address newOwner) public onlyOwner {
-        address oldOwner = owner;
-        newOwner = owner;
-        emit OwnershipChanged(oldOwner, newOwner);
+    modifier onlyProposedOwner() {
+        require(msg.sender == prospectOwner);
+        _;
+    }
+    modifier inTimeframe() {
+        require((ownershipChangedTimeStamp + 30 seconds) < block.timestamp);
+        _;
     }
 
-    function acceptOwnership() public onlyOwner {
-        require(msg.sender == newOwner);
-        uint256 timeLimit = block.timestamp + 30 seconds;
-        require(block.timestamp < timeLimit);
+    function changeOwner(address newOwner) public onlyOwner {
+        newOwner = owner;
+        ownershipChangedTimeStamp = block.timestamp;
+        emit OwnershipChanged(owner, newOwner);
+    }
+
+    function acceptOwnership() public onlyProposedOwner inTimeframe {
+        owner = prospectOwner;
     }
 
     function() external payable {
