@@ -19,9 +19,6 @@ function calcFactorialFor(num) {
     return factorial;
 }
 
-
-
-
 function recursiveFactorial(factorial) {
     let result = 1;
     let factorialNumber = factorial;
