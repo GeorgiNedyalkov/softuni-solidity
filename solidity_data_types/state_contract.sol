@@ -15,7 +15,6 @@ contract Stateful {
 
     State public state;
     Counter public counter;
-
     address owner;
 
     modifier onlyOwner() {
