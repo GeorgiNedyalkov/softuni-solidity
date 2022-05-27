@@ -4,11 +4,12 @@ contract Auction {
     address public owner;
     uint256 startBlock;
     uint256 endBlock;
-    uint256 minBidDifference;
 
     bool public canceled;
     address public highestBidder;
     mapping(address => uint256) fundsOfBidder;
+    uint256 margin;
+    mapping(address => uint256) timeLimit;
 
     event LogBid(
         address bidder,
@@ -23,7 +24,11 @@ contract Auction {
     );
     event LogCanceled();
 
-    constructor(uint256 _startBlock, uint256 _endBlock) public {
+    constructor(
+        uint256 _startBlock,
+        uint256 _endBlock,
+        uint256 _margin
+    ) public {
         require(_startBlock <= _endBlock);
         require(_startBlock > block.number);
 
@@ -31,7 +36,7 @@ contract Auction {
         startBlock = _startBlock;
         endBlock = _endBlock;
 
-        minBidDifference = 1 ether;
+        margin = _margin;
     }
 
     modifier auctionIsLive() {
@@ -81,25 +86,28 @@ contract Auction {
     {
         // reject payments of 0 ETH
         require(msg.value > 0);
+        require(timeLimit[msg.sender] < (block.timestamp + 1 hours));
 
         uint256 newBid = fundsOfBidder[msg.sender] + msg.value; // add to your bid, rather than making a new bid
 
         // get the current highest bid
         uint256 highestBid = fundsOfBidder[highestBidder];
 
-        require(newBid > highestBid + minBidDifference);
+        require(newBid > highestBid + margin);
 
         // update the user bid
         fundsOfBidder[msg.sender] = newBid;
 
         highestBidder = msg.sender;
 
+        timeLimit[msg.sender] = block.timestamp;
+
         emit LogBid(msg.sender, newBid, highestBidder, highestBid);
     }
 
     // it is always a good principle to let users withdraw funds themselves rather than sending it to them
     function withdraw() public onlyEndedOrCanceled {
-        address withdrawAccount;
+        address withdrawAccount = msg.sender;
         uint256 withdrawAmount;
 
         if (canceled) {
@@ -111,6 +119,7 @@ contract Auction {
             // the auction's owner should be allowed to withdraw the highest bid
             if (msg.sender == owner) {
                 withdrawAmount = fundsOfBidder[highestBidder];
+                withdrawAccount = highestBidder;
             } else {
                 // all the participants should be able to withdraw of they did not win
                 withdrawAmount = fundsOfBidder[msg.sender];
