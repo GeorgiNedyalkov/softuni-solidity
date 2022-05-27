@@ -1,56 +1,55 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 contract ServiceMarketplace {
-    address public onwer;
-    address cashRegister;
-    uint256 servicePrice;
+    event LogServiceBought(address indexed by, uint256 timestamp);
 
-    uint256 lastWidrawalTimestamp;
-    uint256 lastPurchaseTimestamp;
+    address payable owner;
+    uint256 lastBuy = 0;
+    uint256 lastWithdraw = 0;
 
-    event LogServiceBought(address indexed buyer, uint256 payment);
+    function() external payable {
+        revert("Use buy function");
+    }
 
-    modifier onlyOnwer() {
-        require(onwer = msg.sender, "Only the owner can call this function");
+    modifier onlyOwner() {
+        require(owner == msg.sender);
         _;
     }
 
-    modifier marketIsOpen() {
-        require(lastPurchaseTimestamp > block.timestamp + 2 minutes);
+    modifier serviceLock() {
+        require(block.timestamp > lastBuy + 2 minutes);
+        _;
+    }
+
+    modifier withdrawLock() {
+        require(block.timestamp > lastWithdraw + 1 hours);
         _;
     }
 
     constructor() public {
-        onwer = msg.sender;
-
-        servicePrice = 1 ether;
+        owner = msg.sender;
     }
 
-    function buyService() public payable marketIsOpen {
-        require(msg.value > 0);
+    function buy() public payable serviceLock {
+        require(msg.value >= 1 ether);
+        lastBuy = block.timestamp;
+        emit LogServiceBought(msg.sender, lastBuy);
 
-        if (msg.value > servicePrice) {
-            uint256 remainingAmount = msg.value - servicePrice;
-            cashRegister.transfer(servicePrice);
+        uint256 remainingAmount = msg.value - 1 ether;
+
+        if (remainingAmount > 0) {
             msg.sender.transfer(remainingAmount);
-        } else {
-            cashRegister.transfer(servicePrice);
         }
-
-        lastPurchaseTimestamp = block.timestamp;
-
-        emit LogServiceBought(msg.sender, msg.value);
     }
 
-    function withdraw(uint256 withdrawAmount) onlyOwner {
-        require(
-            withdrawAmount <= 5 ether,
-            "Maximum withdraw amount is 5 ethers"
-        );
-        require(lastWidrawTimestamp > block.timestamp + 1 hours);
+    function withdraw(uint256 withdrawAmount) public onlyOwner withdrawLock {
+        require(withdrawAmount <= 5 ether);
+        // the address(this).balance is the balance of the current contract
+        // is the balance of the contract bigger than the amount to withdraw
+        // We are type casting this as an address
+        require(address(this).balance >= withdrawAmount);
 
-        cashRegister -= withdrawAmount;
-        msg.sender.transfer(withdrawAmount);
-        lastWidrawalTimestamp = block.timestamp;
+        lastWithdraw = block.timestamp;
+        owner.transfer(withdrawAmount);
     }
 }
