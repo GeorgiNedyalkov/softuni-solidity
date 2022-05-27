@@ -10,12 +10,13 @@ contract Stateful {
     struct Counter {
         uint256 counter;
         uint256 timestamp;
-        address addr;
     }
 
     State public state;
     Counter public counter;
     address owner;
+
+    mapping(address => Counter) userCounters;
 
     modifier onlyOwner() {
         require(owner == msg.sender);
@@ -40,8 +41,7 @@ contract Stateful {
     }
 
     function incrementCounter() public canExecute {
-        counter.counter++;
-        counter.timestamp = now;
-        counter.addr = msg.sender;
+        userCounters[msg.sender].counter++;
+        userCounters[msg.sender].timestamp = block.timestamp;
     }
 }
