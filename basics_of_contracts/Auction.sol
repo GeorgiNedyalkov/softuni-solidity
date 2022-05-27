@@ -4,6 +4,7 @@ contract Auction {
     address public owner;
     uint256 startBlock;
     uint256 endBlock;
+    uint256 minBidDifference;
 
     bool public canceled;
     address public highestBidder;
@@ -29,6 +30,8 @@ contract Auction {
         owner = msg.sender;
         startBlock = _startBlock;
         endBlock = _endBlock;
+
+        minBidDifference = 1 ether;
     }
 
     modifier auctionIsLive() {
@@ -84,7 +87,7 @@ contract Auction {
         // get the current highest bid
         uint256 highestBid = fundsOfBidder[highestBidder];
 
-        require(newBid > highestBid);
+        require(newBid > highestBid + minBidDifference);
 
         // update the user bid
         fundsOfBidder[msg.sender] = newBid;

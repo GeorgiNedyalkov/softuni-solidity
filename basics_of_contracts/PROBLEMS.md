@@ -43,3 +43,25 @@ Write a contract, that:
  - [x] The constructor shall receive 2 parameters - start time and end time
   - [x] You need to validate them correctly. Think about it.
 - [x] Create custom modifier which will help you with all functions
+
+
+# HomeWork: Intro to Ethereum and Smart Contracts
+
+1. Problem 1. Improve the Auction contract
+
+Add the following functionality
+ - [] Add functionality which requires a minimum bid difference between the highest bid
+ and the new bid. For example: current bid is 5, the next should be 10, then 15... etc.
+ - [] The value of the big margin should be included in the constructor.
+ - [] If someone has placed a bid, he can do it again after 1 hour.
+
+
+2. Service Marketplace
+
+Create a contract, that:
+ - [] Has a method to buy a certain service. The service costs 1 ETH.
+ - [] If the money sent are more than 1 ETH the contract will return the extra back.
+ - [] The contract confirms that the person bought the service by emitting an event.
+ - [] Nobody can buy the service for 2 minutes after someone bought it. Use a custome function modifier.
+ - [] Use assert and require whenever possible.
+ - [] The owner of the contract can withdraw the money once per hour and maximum of 5 ETH at a time.
