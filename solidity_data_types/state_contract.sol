@@ -42,5 +42,6 @@ contract Stateful {
     function incrementCounter() public canExecute {
         counter.counter++;
         counter.timestamp = now;
+        counter.addr = msg.sender;
     }
 }
