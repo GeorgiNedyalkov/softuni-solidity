@@ -29,6 +29,15 @@ Write a contract, that:
  Write a contract, that:
 - [] Should store the balance of two coins (e.g. - RedCoin, GreenCoin)
  - [] You should compose the coins in a single struc
- - [] You should store the balances of both coins in a single ___
+ - [] You should store the balances of both coins in a single mapping
 - [] The contract should have 10000 RedCoins and 5000 GreenCoins
 - [] Have two functions that are used to send coins (one for RedCoin and another for GreenCoin)
+
+ ## Problem 4. Multiple coins contract vol.2
+
+
+Write a contract that:
+- [] Should store the balance of multiple coins (e.g. - RedCoin, GreenCoin, Blue, Purple, Yellow, Violet, Indigo, etc.)
+ - [] You should store the balances of all coins in a mapping
+- [] The contract creator should have 10000 of each coin
+- [] Have one function that is used to send coins (think of a way to determine which coins you are sending)
