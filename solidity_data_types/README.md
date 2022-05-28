@@ -41,3 +41,12 @@ Write a contract that:
  - [x] You should store the balances of all coins in a mapping
 - [x] The contract creator should have 10000 of each coin
 - [x] Have one function that is used to send coins (think of a way to determine which coins you are sending)
+
+## Problem 5. Pokemon Game
+
+Create a Pokemon game, that:
+
+- [] Knows 10 different type of Pokemons
+- [] Any player can say that he caught a Pokemon, but maximum once per 15 seconds (personalized time)
+- [] The contract can list which player possesses a Pokemon of ceratain type
+- [] Watch out for duplicates
