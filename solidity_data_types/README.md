@@ -50,3 +50,4 @@ Create a Pokemon game, that:
 - [] Any player can say that he caught a Pokemon, but maximum once per 15 seconds (personalized time)
 - [] The contract can list which player possesses a Pokemon of ceratain type
 - [] Watch out for duplicates
+
