@@ -74,16 +74,16 @@ Create people balances contract.
 
 Create a contract that:
 
-- [] Declares all continents (Europe, Asia, etc.) Use the best way to declare them -
+- [x] Declares all continents (Europe, Asia, etc.) Use the best way to declare them -
 we know that there is a fixed amount of continents and we know their names.
-- [] Declares a data representing a single country (name, continent, population) 
-- [] Keep track of each country's capital, so people can check country's capital by simply
+- [x] Declares a data representing a single country (name, continent, population) 
+- [x] Keep track of each country's capital, so people can check country's capital by simply
 giving a name 
-- [] Store only European countries
-- [] Have a function to add country (should accept only European countries). The function accepts
+- [x] Store only European countries
+- [x] Have a function to add country (should accept only European countries). The function accepts
 all countrie's properties (name, continent, population)
-- [] Have a function to add capital to a single country (No duplicates - i.e. Sofia cannot be a capital of both Bulgaria and Romania)
-- [] Have a function that gives the capital by a given name
-- [] Have a function to remove a capital
-- [] Have a function that returns the string representation of each continent (i.e. "Asia", "Europe", etc.)
-- [] Have a function that returns all European countries
+- [x] Have a function to add capital to a single country (No duplicates - i.e. Sofia cannot be a capital of both Bulgaria and Romania)
+- [x] Have a function that gives the capital by a given name
+- [x] Have a function to remove a capital
+- [x] Have a function that returns the string representation of each continent (i.e. "Asia", "Europe", etc.)
+- [x] Have a function that returns all European countries
