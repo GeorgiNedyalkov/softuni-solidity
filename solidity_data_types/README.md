@@ -87,3 +87,18 @@ all countrie's properties (name, continent, population)
 - [x] Have a function to remove a capital
 - [x] Have a function that returns the string representation of each continent (i.e. "Asia", "Europe", etc.)
 - [x] Have a function that returns all European countries
+
+## Problem 3. Simple Token Contract
+
+Create contract that represents a token with the following characteristics:
+- [x] The token has name.
+- [x] The token has symbol.
+- [x] The token has decimals (e.g. decimals = 2, value 100 should be interpreted as 1.00)
+- [x] Keep track of user balances
+- [x] Has a total supply (the total number of tokens that exists)
+ - [x] The total supply should be given as a parameter to the constructor
+ - [x] The total supply shoudl be assigned to the contract creator
+ - [x] Keep in mind the decimals
+- [x] The contract should NOT accept ETH. Penalize everyone who is trying to send ethers to the contract.
+- [x] Have a function that transfers a number of tokens to another address
+- [x] Emit events when appropriate
