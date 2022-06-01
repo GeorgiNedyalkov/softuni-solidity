@@ -69,3 +69,21 @@ Create people balances contract.
 - [x] For each token holder there should be a boolean flag that shows if that person holds or even held tokens
 - [x] There should be an array that contains all current and past token holders
 - [] Emit events where you think it's appropriate
+
+## Problem 2. Planet Earth Contract
+
+Create a contract that:
+
+- [] Declares all continents (Europe, Asia, etc.) Use the best way to declare them -
+we know that there is a fixed amount of continents and we know their names.
+- [] Declares a data representing a single country (name, continent, population) 
+- [] Keep track of each country's capital, so people can check country's capital by simply
+giving a name 
+- [] Store only European countries
+- [] Have a function to add country (should accept only European countries). The function accepts
+all countrie's properties (name, continent, population)
+- [] Have a function to add capital to a single country (No duplicates - i.e. Sofia cannot be a capital of both Bulgaria and Romania)
+- [] Have a function that gives the capital by a given name
+- [] Have a function to remove a capital
+- [] Have a function that returns the string representation of each continent (i.e. "Asia", "Europe", etc.)
+- [] Have a function that returns all European countries
