@@ -46,8 +46,26 @@ Write a contract that:
 
 Create a Pokemon game, that:
 
-- [] Knows 10 different type of Pokemons
-- [] Any player can say that he caught a Pokemon, but maximum once per 15 seconds (personalized time)
-- [] The contract can list which player possesses a Pokemon of ceratain type
-- [] Watch out for duplicates
+- [x] Knows 10 different type of Pokemons
+- [x] Any player can say that he caught a Pokemon, but maximum once per 15 seconds (personalized time)
+- [x] The contract can list which player possesses a Pokemon of ceratain type
+- [x] Watch out for duplicates
 
+
+# Homework
+
+## Problem 1. Crowdsale Contract
+
+Create people balances contract.
+
+- [x] The contract holds the account balance and the balance is represented by an integer
+- [x] The contract has states:
+ - [x] Crowdsale state - in the first 5 minutes, where people can buy the token at a rate of 5 Tokens / 1
+ ETH. People cannot transfer during this period.
+ - [x] Open exchange state - after that period where people can transfer the tokens.
+- [x] Minimum investment 1 ETH
+- [x] Accept only round ETH (i.e. cannot send 0.5 or 1.7 ETH)
+- [x] The contract owner can withdraw the funds after 1 year
+- [x] For each token holder there should be a boolean flag that shows if that person holds or even held tokens
+- [x] There should be an array that contains all current and past token holders
+- [] Emit events where you think it's appropriate
