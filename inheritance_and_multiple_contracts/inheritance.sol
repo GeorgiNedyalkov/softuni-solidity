@@ -40,14 +40,14 @@ contract Owned {
 }
 
 contract Inheritant is SafeMath, Owned {
-    int256 state;
-    uint256 stateChangeTimestamp = 1;
+    uint256 state;
+    uint256 lastChange = now;
 
     function changeState() public onlyOwner {
-        add(uint256(state), (now % 256));
-        mul(uint256(state), stateChangeTimestamp);
-        stateChangeTimestamp = now;
-        sub(uint256(state), block.gaslimit);
+        state = add(state, (now % 256));
+        state = mul(state, sub(now, lastChange));
+        state = sub(state, block.gaslimit);
+        lastChange = now;
     }
 
     function getState() public view returns (int256) {
