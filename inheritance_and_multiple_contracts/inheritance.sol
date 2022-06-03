@@ -18,6 +18,7 @@ contract SafeMath {
         }
         uint256 c = a * b;
         assert(c / a == b);
+        return c;
     }
 }
 
